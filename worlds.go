@@ -12,7 +12,7 @@ messaging
 
 jj
 */
-
+/**/
 
 package main
 
@@ -26,7 +26,19 @@ const (
 	screenheight = 400
 )
 
+/*
+where in the world
+what objects in this sector
+locations of these objects
+characteristics - can be cover or not
+doors
+glass
+roads
+walls
+wood
 
+
+*/
 type worldtype struct {
 	x, y float64
 	msg string 
@@ -36,6 +48,7 @@ var (
   mousedownState bool
   city []worldtype 
   city2 [][]worldtype
+  oldmousex,oldmousey int
 
 )
 
@@ -86,8 +99,25 @@ func mouseLeftdown(screen *ebiten.Image) {
 func mouseLeftup(screen *ebiten.Image) {
 	mx, my := ebiten.CursorPosition()
 	fmt.Print(mx,",",my," mouseup \n")
+
 }
 
+func mouseWithin(screen *ebiten.Image) {
+	mx, my := ebiten.CursorPosition()
+
+	if mx != oldmousex && my != oldmousey {
+		fmt.Print(mx,",",my," mouse within \n")	
+	} 
+	
+	oldmousex,oldmousey = mx, my
+
+}
+
+func mouseRightDown(screen *ebiten.Image) {
+	mx, my := ebiten.CursorPosition()
+	fmt.Print(mx,",",my," mouse right down \n")
+
+}
 
 func update(screen *ebiten.Image) error {
 
@@ -96,7 +126,15 @@ func update(screen *ebiten.Image) error {
 		//fmt.Print("running slowly! \n")
 	}
 
-  if mousedownState {
+	mouseWithin(screen)
+
+	if ebiten.IsMouseButtonPressed(ebiten.MouseButtonRight) {
+		mouseRightDown(screen)
+	}
+
+
+
+  	if mousedownState {
 		if !ebiten.IsMouseButtonPressed(ebiten.MouseButtonLeft) {
 			mousedownState = false
 			mouseLeftup(screen)
