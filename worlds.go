@@ -73,9 +73,9 @@ func InitProg() {
     	city2[i] = make([]worldtype, 10)  // 
 	}
 	city2[0][0].msg = "gopher"
-	city2[9][0].msg = "codemotherfucker"
-	city2[5][5].msg = "Singapore"
-	city2[6][5].msg = "Screwed"
+	city2[9][0].msg = "python"
+	city2[5][5].msg = "golang"
+	city2[6][5].msg = "neither"
 	city2[6][5].msg = "Saved"
 	i = 0
 
