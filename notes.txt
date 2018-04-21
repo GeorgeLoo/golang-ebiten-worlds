@@ -1,0 +1,54 @@
+
+
+Software Toys Concept ... not perfect but playable!
+
+3:55 PM 14/4/2018
+----------------------------------------------------
+
+
+
+
+
+
+----------------------------------------------------
+
+Basic movement of the main icon
+
+screen to screen
+
+messages on screen
+
+shooting at non moving targets
+
+
+better version of a shooter game 25.1.2018
+	big cities
+	drone recce 
+	outside of visible range firing
+	mortar attack
+	sniper
+	buildings
+	navigation
+	doors
+	parks
+	vehicles
+	glass shattering
+	open ended
+	can take on almost any role in the game world
+    mines
+    cover which breaks down after a while
+    rocket packs
+    helicopters
+
+    space ships!
+    
+
+object
+	name
+	type 
+	location in world
+	screen location
+	counter
+
+
+++-
