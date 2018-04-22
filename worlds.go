@@ -25,6 +25,12 @@ import (
 const (
 	screenwidth = 800
 	screenheight = 400
+    kMoveLeft = 1001
+    kMoveRight = 1002
+    kMoveUp = 1003
+    kMoveDown = 1004
+    kMoveStop = 1005
+    
 )
 
 /*
@@ -50,6 +56,7 @@ type baseObject struct {
     name string
     h,w int
 	image      *ebiten.Image
+    direction int
     
 }
 
@@ -59,7 +66,58 @@ var (
     city2 [][]worldtype
     oldmousex,oldmousey int
     hero baseObject
+
+	keyStates    = map[ebiten.Key]int{
+		ebiten.KeyUp:    0,
+		ebiten.KeyDown:  0,
+		ebiten.KeyLeft:  0,
+		ebiten.KeyRight: 0,
+		ebiten.KeyA:     0,
+		ebiten.KeyS:     0,
+		ebiten.KeyW:     0,
+		ebiten.KeyD:     0,
+	}
 )
+
+func controls(screen *ebiten.Image) {
+
+
+   	for key := range keyStates {
+    	if !ebiten.IsKeyPressed(key) {
+			keyStates[key] = 0
+			continue
+		}
+		keyStates[key]++
+	}
+
+    if keyStates[ebiten.KeyA] == 1 {
+        fmt.Println("A key")
+        hero.move(kMoveLeft)
+
+    }
+    if keyStates[ebiten.KeyW] == 1 {
+        fmt.Println("W up key")
+        hero.move(kMoveUp)
+    }
+    if keyStates[ebiten.KeyS] == 1 {
+        fmt.Println("S down key")
+        hero.move(kMoveDown)
+    }
+    if keyStates[ebiten.KeyD] == 1 {
+        
+        hero.move(kMoveRight)
+    }
+
+
+}
+
+func movement(screen *ebiten.Image) {
+
+
+    hero.draw(100,100, screen)
+
+
+}
 
 func InitProg() {
 
@@ -104,8 +162,28 @@ func InitProg() {
 }
 
 
+
+func (p *baseObject)  move(direction int) {
+
+    if direction == kMoveUp {
+        p.direction = kMoveUp
+
+    } else if direction == kMoveDown {
+        p.direction = kMoveDown
+
+    } else if direction == kMoveLeft {
+        p.direction = kMoveLeft
+    } else if direction == kMoveRight {
+        fmt.Println("move right key")
+        p.direction = kMoveRight
+    }
+
+}
+
+
 func (p *baseObject) init(x float64, y float64,h int, w int, name string) {
 
+    p.direction = kMoveStop
     blue := color.NRGBA{0x00, 0x00, 0xff, 0xff}
     p.image, _ =  ebiten.NewImage(w, h, ebiten.FilterNearest)
     p.image.Fill(blue)
@@ -136,7 +214,7 @@ func mouseWithin(screen *ebiten.Image) {
 	mx, my := ebiten.CursorPosition()
 
 	if mx != oldmousex && my != oldmousey {
-		fmt.Print(mx,",",my," mouse within \n")	
+		//fmt.Print(mx,",",my," mouse within \n")	
 	} 
 	
 	oldmousex,oldmousey = mx, my
@@ -160,7 +238,11 @@ func update(screen *ebiten.Image) error {
 		//fmt.Print("running slowly! \n")
 	}
 
-    hero.draw(100,100, screen)
+    controls(screen)
+
+    
+
+    movement(screen)
 
 	mouseWithin(screen)
 
