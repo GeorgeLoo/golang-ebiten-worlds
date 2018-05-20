@@ -91,21 +91,21 @@ func controls(screen *ebiten.Image) {
 	}
 
     if keyStates[ebiten.KeyA] == 1 {
-        fmt.Println("A key")
-        hero.move(kMoveLeft)
+       // fmt.Println("A key")
+        hero.keymove(kMoveLeft)
 
     }
     if keyStates[ebiten.KeyW] == 1 {
-        fmt.Println("W up key")
-        hero.move(kMoveUp)
+        //fmt.Println("W up key")
+        hero.keymove(kMoveUp)
     }
     if keyStates[ebiten.KeyS] == 1 {
-        fmt.Println("S down key")
-        hero.move(kMoveDown)
+        //fmt.Println("S down key")
+        hero.keymove(kMoveDown)
     }
     if keyStates[ebiten.KeyD] == 1 {
         
-        hero.move(kMoveRight)
+        hero.keymove(kMoveRight)
     }
 
 
@@ -113,8 +113,8 @@ func controls(screen *ebiten.Image) {
 
 func movement(screen *ebiten.Image) {
 
-
-    hero.draw(100,100, screen)
+    hero.move()
+    hero.draw(screen)
 
 
 }
@@ -122,7 +122,7 @@ func movement(screen *ebiten.Image) {
 func InitProg() {
 
 
-    hero.init(10,10,50,20,"hero")
+    hero.init(100,100,50,20,"hero")
 
 	city = make([]worldtype,5)
 	city[0].x = 1
@@ -163,26 +163,64 @@ func InitProg() {
 
 
 
-func (p *baseObject)  move(direction int) {
+func (p *baseObject)  keymove(direction int) {
 
     if direction == kMoveUp {
+        if direction == p.direction {
+            p.direction = kMoveStop
+            return
+        }
         p.direction = kMoveUp
 
     } else if direction == kMoveDown {
+        if direction == p.direction {
+            p.direction = kMoveStop
+            return
+        }
         p.direction = kMoveDown
-
+        
     } else if direction == kMoveLeft {
+        if direction == p.direction {
+            p.direction = kMoveStop
+            return
+        }
         p.direction = kMoveLeft
+       
     } else if direction == kMoveRight {
-        fmt.Println("move right key")
+        //fmt.Println("move right key")
+        if direction == p.direction {
+            p.direction = kMoveStop
+            return
+        }
         p.direction = kMoveRight
+        
     }
+
+    
 
 }
 
 
+func  (p *baseObject) move() {
+
+    var step float64
+    step = 1.0
+
+    if p.direction == kMoveUp {
+        p.y -= step 
+    } else if p.direction == kMoveDown {
+        p.y += step
+    } else if p.direction == kMoveRight {
+        p.x += step
+    } else if p.direction == kMoveLeft {
+        p.x -= step
+    }
+}
+
 func (p *baseObject) init(x float64, y float64,h int, w int, name string) {
 
+    p.x = x
+    p.y = y
     p.direction = kMoveStop
     blue := color.NRGBA{0x00, 0x00, 0xff, 0xff}
     p.image, _ =  ebiten.NewImage(w, h, ebiten.FilterNearest)
@@ -190,10 +228,11 @@ func (p *baseObject) init(x float64, y float64,h int, w int, name string) {
 
 }
 
-func (p *baseObject) draw(x float64, y float64, screen *ebiten.Image) {
+func (p *baseObject) draw( screen *ebiten.Image) {
+
 
 	opts := &ebiten.DrawImageOptions{}
-	opts.GeoM.Translate(x, y)
+	opts.GeoM.Translate(p.x, p.y)
    	screen.DrawImage(p.image, opts)
     
 }
